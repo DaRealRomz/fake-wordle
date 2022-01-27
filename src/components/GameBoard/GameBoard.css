@@ -1,0 +1,16 @@
+.board {
+    width: 350px;
+    max-width: 100%;
+    position: relative;
+}
+
+#mobileKeyboard {
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}

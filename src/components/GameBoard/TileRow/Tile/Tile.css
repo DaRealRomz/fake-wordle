@@ -1,0 +1,82 @@
+.tile {
+    flex-grow: 1;
+    flex-basis: 0;
+    aspect-ratio: 1;
+    margin: 1.14%;
+    user-select: none;
+}
+
+.tile-contents {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+.tile.present .tile-contents,
+.tile.absent .tile-contents,
+.tile.correct .tile-contents {
+    animation: rotate 0.7s forwards;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotateY(180deg);
+    }
+}
+
+.tile.touched {
+    animation: zoom 0.1s;
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.tile-face {
+    position: absolute;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    display: flex;
+    border: 2px solid var(--darkGray);
+    backface-visibility: hidden;
+}
+
+.tile-face-back {
+    transform: rotateY(180deg);
+}
+
+.tile:not(.untouched) .tile-face-front {
+    border-color: var(--lightGray);
+}
+
+.tile.absent .tile-face-back {
+    border-color: var(--gray);
+    background-color: var(--gray);
+}
+
+.tile.present .tile-face-back {
+    border-color: var(--yellow);
+    background-color: var(--yellow);
+}
+
+.tile.correct .tile-face-back {
+    border-color: var(--green);
+    background-color: var(--green);
+}
+
+.tile-face > span {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}

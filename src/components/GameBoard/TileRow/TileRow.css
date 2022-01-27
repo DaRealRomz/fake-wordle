@@ -1,0 +1,17 @@
+.row {
+    width: 100%;
+    display: flex;
+}
+
+.shake .row.active {
+    animation: shake 0.15s linear 2;
+}
+
+@keyframes shake {
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}

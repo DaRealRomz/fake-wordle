@@ -1,0 +1,20 @@
+:root {
+    --green: #538d4e;
+    --yellow: #b59f3b;
+    --lightGray: #565758;
+    --gray: #3a3a3c;
+    --darkGray: #353537;
+    --white: #d7dadc;
+    --black: #121213;
+}
+
+body {
+    margin: 0;
+    font-family: Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}

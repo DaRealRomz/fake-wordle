@@ -1,0 +1,55 @@
+.tile-1 .tile-contents {
+    animation-delay: 0.25s !important;
+}
+
+.tile-2 .tile-contents {
+    animation-delay: 0.5s !important;
+}
+
+.tile-3 .tile-contents {
+    animation-delay: 0.75s !important;
+}
+
+.tile-4 .tile-contents {
+    animation-delay: 1s !important;
+}
+
+.results .tile-0 .tile-contents {
+    animation-delay: 1s !important;
+}
+
+.results .tile-1 .tile-contents {
+    animation-delay: 1.25s !important;
+}
+
+.results .tile-2 .tile-contents {
+    animation-delay: 1.5s !important;
+}
+
+.results .tile-3 .tile-contents {
+    animation-delay: 1.75s !important;
+}
+
+.results .tile-4 .tile-contents {
+    animation-delay: 2s !important;
+}
+
+.wait .results .tile-0 .tile-contents {
+    animation-delay: 2.5s !important;
+}
+
+.wait .results .tile-1 .tile-contents {
+    animation-delay: 2.75s !important;
+}
+
+.wait .results .tile-2 .tile-contents {
+    animation-delay: 3s !important;
+}
+
+.wait .results .tile-3 .tile-contents {
+    animation-delay: 3.25s !important;
+}
+
+.wait .results .tile-4 .tile-contents {
+    animation-delay: 3.5s !important;
+}

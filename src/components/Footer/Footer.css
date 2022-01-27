@@ -1,0 +1,19 @@
+footer {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+footer > .bottombar {
+    min-height: 50px;
+    border-top: 1px solid var(--darkGray);
+    font-size: 25px;
+    color: var(--white);
+    margin-top: auto;
+}
+
+.btn-switch {
+    font-family: Helvetica, sans-serif;
+    font-size: 25px;
+}

@@ -1,0 +1,31 @@
+.main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.flex {
+    display: flex;
+}
+
+.center {
+    margin: auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+button.link {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+}
