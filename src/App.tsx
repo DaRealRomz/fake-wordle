@@ -41,7 +41,7 @@ function App() {
     useEffect(() => {
         if (game.overtime) return;
         const timeoutId = setTimeout(() => {
-            if (game.seenResults) {
+            if (game.seenResults || !game.letters.flat().join("").length) {
                 setGame(new Game());
             }
         }, game.remainingTime);
