@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/fake-wordle/static/css/main.22bdec70.css",
+    "main.js": "/fake-wordle/static/js/main.cd516a48.js",
+    "index.html": "/fake-wordle/index.html",
+    "main.22bdec70.css.map": "/fake-wordle/static/css/main.22bdec70.css.map",
+    "main.cd516a48.js.map": "/fake-wordle/static/js/main.cd516a48.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.22bdec70.css",
+    "static/js/main.cd516a48.js"
+  ]
+}
