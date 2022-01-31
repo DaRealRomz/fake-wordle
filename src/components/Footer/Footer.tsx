@@ -13,11 +13,23 @@ const getTimer = (game: Game): string => {
 };
 
 export default function Footer({ game, endGame }: FooterProps) {
-    const [timer, setTimer] = useState(getTimer(game));
+    const [timer, setTimer] = useState("");
 
     useEffect(() => {
-        const intervalId = setInterval(() => setTimer(getTimer(game)), 1000);
-        return () => clearInterval(intervalId);
+        let timeout: NodeJS.Timeout | null = null;
+        const updateTimer = () => {
+            setTimer(getTimer(game));
+            if (game.overtime) {
+                timeout = null;
+                return;
+            }
+            const now = Date.now();
+            timeout = setTimeout(updateTimer, now - (now % 1000) + 1000);
+        };
+        updateTimer();
+        return () => {
+            if (timeout) clearTimeout(timeout);
+        };
     }, [game]);
 
     return (
