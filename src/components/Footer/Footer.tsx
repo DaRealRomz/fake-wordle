@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Game from "../../Game";
+import { GameState } from "../../Game/Game";
 import "./Footer.css";
 
 type FooterProps = {
-    game: Game;
+    game: GameState;
     endGame: () => void;
 };
 
-const getTimer = (game: Game): string => {
+const getTimer = (gameState: GameState): string => {
+    const game = new Game(gameState);
     if (game.overtime) return "now";
     return "in " + Game.getTimer(game.remainingTime);
 };
@@ -19,7 +21,7 @@ export default function Footer({ game, endGame }: FooterProps) {
         let timeout: NodeJS.Timeout | null = null;
         const updateTimer = () => {
             setTimer(getTimer(game));
-            if (game.overtime) {
+            if (new Game(game).overtime) {
                 timeout = null;
                 return;
             }
@@ -37,7 +39,7 @@ export default function Footer({ game, endGame }: FooterProps) {
             <div className="bottombar flex">
                 <span className="center">
                     Next word available {timer}.
-                    {game.overtime && (
+                    {new Game(game).overtime && (
                         <>
                             {" "}
                             <button className="link btn-switch" onClick={() => endGame()}>

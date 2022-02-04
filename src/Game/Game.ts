@@ -1,118 +1,110 @@
 import RC4 from "./RC4";
 import { allWords, commonWords } from "./words";
 
-class Game {
-    public readonly wordId: number;
-    private _letters: string[][];
-    private _row: number;
-    private _col: number;
-    private _complete: boolean;
-    private _seenResults: boolean;
-    private _showingResults: boolean;
-    public readonly endTime: number;
-    public readonly startTime: number;
-    private _finishTime?: number;
-    private _won: boolean;
+export type GameState = {
+    wordId: number;
+    letters: string[][];
+    row: number;
+    col: number;
+    complete: boolean;
+    seenResults: boolean;
+    showingResults: boolean;
+    startTime: number;
+    finishTime?: number;
+    expireTime: number;
+    won: boolean;
+};
 
-    constructor(
-        wordId?: number,
-        letters = Array.from(Array(6), () => Array(5).fill("")) as string[][],
-        row = 0,
-        col = 0,
-        complete = false,
-        endTime?: number,
-        seenResults = false,
-        showingResults = false,
-        startTime = Date.now(),
-        finishTime?: number,
-        won = false
-    ) {
-        const now = Date.now();
-        this.endTime = endTime || now - (now % 300000) + 300000;
-        this.wordId =
-            wordId !== undefined ? wordId : Math.floor(new RC4(RC4.getKey(this.endTime)).random() * commonWords.length);
-        this._letters = letters;
-        this._row = row;
-        this._col = col;
-        this._complete = complete;
-        this._seenResults = seenResults;
-        this._showingResults = showingResults;
-        this.startTime = startTime;
-        this._finishTime = finishTime;
-        this._won = won;
+class Game {
+    private state: GameState;
+
+    constructor(state?: GameState | number) {
+        if (!state || typeof(state) === 'number') {
+            const now = Date.now();
+            const expireTime = now - (now % 300000) + 300000;
+            state = {
+                wordId: state || Math.floor(new RC4(RC4.getKey(expireTime)).random() * commonWords.length),
+                letters: Array.from(Array(6), () => Array(5).fill("")) as string[][],
+                row: 0,
+                col: 0,
+                complete: false,
+                expireTime,
+                seenResults: false,
+                showingResults: false,
+                startTime: Date.now(),
+                won: false,
+            }
+        }
+        this.state = state;
     }
+
+    // constructor(
+    //     wordId?: number,
+    //     letters = Array.from(Array(6), () => Array(5).fill("")) as string[][],
+    //     row = 0,
+    //     col = 0,
+    //     complete = false,
+    //     endTime?: number,
+    //     seenResults = false,
+    //     showingResults = false,
+    //     startTime = Date.now(),
+    //     finishTime?: number,
+    //     won = false
+    // ) {
+    //     const now = Date.now();
+    //     this.endTime = endTime || now - (now % 300000) + 300000;
+    //     this.wordId =
+    //         wordId !== undefined ? wordId : Math.floor(new RC4(RC4.getKey(this.endTime)).random() * commonWords.length);
+    //     this._letters = letters;
+    //     this._row = row;
+    //     this._col = col;
+    //     this._complete = complete;
+    //     this._seenResults = seenResults;
+    //     this._showingResults = showingResults;
+    //     this.startTime = startTime;
+    //     this._finishTime = finishTime;
+    //     this._won = won;
+    // }
 
     public get word() {
-        return commonWords[this.wordId];
+        return commonWords[this.state.wordId];
     }
 
-    public get letters(): ReadonlyArray<ReadonlyArray<string>> {
-        return this._letters;
-    }
-
-    public get row() {
-        return this._row;
-    }
-
-    public get col() {
-        return this._col;
-    }
-
-    public get complete() {
-        return this._complete;
-    }
-
-    public get seenResults() {
-        return this._seenResults;
-    }
-
-    public get showingResults() {
-        return this._showingResults;
-    }
-
-    public get currentGuess() {
-        return this.letters[this.row].join("");
+    private get currentGuess() {
+        return this.state.letters[this.state.row].join("");
     }
 
     public get overtime() {
-        return Date.now() > this.endTime;
+        return Date.now() > this.state.expireTime;
     }
 
     public get remainingTime() {
-        return this.endTime - Date.now();
-    }
-
-    public get finishTime() {
-        return this._finishTime;
+        return this.state.expireTime - Date.now();
     }
 
     public get duration() {
-        return (this._finishTime || Date.now()) - this.startTime;
-    }
-
-    public get won() {
-        return this._won;
+        return (this.state.finishTime || Date.now()) - this.state.startTime;
     }
 
     public setCol(col: number): Game {
-        this._col = col;
-        return this.clone();
+        this.state.col = col;
+        return this;
     }
 
     public changeCol(offset: number): Game {
-        this._col += offset;
-        return this.clone();
+        this.state.col += offset;
+        return this;
     }
 
     public setPos(row: number, col: number): Game {
-        this._row = row;
-        this._col = col;
-        return this.clone();
+        this.state.row = row;
+        this.state.col = col;
+        return this;
     }
 
     public setLetter(letter: string): Game {
-        this._letters[this.row][this.col] = letter;
-        return this.clone();
+        this.state.letters[this.state.row][this.state.col] = letter;
+        return this;
     }
 
     public verifyGuess(): boolean {
@@ -120,42 +112,42 @@ class Game {
     }
 
     public validateRow(): Game {
-        this._won = this.currentGuess === this.word;
-        this._complete = this.row === 5 || this.won;
-        if (this.complete) {
+        this.state.won = this.currentGuess === this.word;
+        this.state.complete = this.state.row === 5 || this.state.won;
+        if (this.state.complete) {
             this.showResults();
-            this._finishTime = Date.now();
+            this.state.finishTime = Date.now();
         }
-        this._row++;
-        this._col = 0;
-        return this.clone();
+        this.state.row++;
+        this.state.col = 0;
+        return this;
     }
 
     public end(): Game {
-        this._complete = true;
-        this._seenResults = true;
-        this._finishTime = Date.now();
+        this.state.complete = true;
+        this.state.seenResults = true;
+        this.state.finishTime = Date.now();
         this.showResults();
-        return this.clone();
+        return this;
     }
 
     public showResults(): Game {
-        this._showingResults = true;
-        return this.clone();
+        this.state.showingResults = true;
+        return this;
     }
 
     public hideResults(): Game {
-        this._showingResults = false;
-        this._seenResults = true;
-        return this.clone();
+        this.state.showingResults = false;
+        this.state.seenResults = true;
+        return this;
     }
 
     public getTileStates(row: number): ReadonlyArray<Game.TileState> {
-        if (row < this.row) {
+        if (row < this.state.row) {
             const states: Game.TileState[] = [];
-            const correct = this.letters[row].map((letter, i) => this.word[i] === letter);
+            const correct = this.state.letters[row].map((letter, i) => this.word[i] === letter);
             const availableLetters = this.word.split("").filter((_, i) => !correct[i]);
-            this.letters[row].forEach((letter, i) => {
+            this.state.letters[row].forEach((letter, i) => {
                 if (correct[i]) {
                     states[i] = Game.TileState.Correct;
                 } else {
@@ -170,21 +162,21 @@ class Game {
             });
             return states;
         } else {
-            return this.letters[row].map((letter) =>
+            return this.state.letters[row].map((letter) =>
                 letter.length === 0 ? Game.TileState.Untouched : Game.TileState.Touched
             );
         }
     }
 
-    public getResults(): ReadonlyArray<Game.TileState> {
+    public get results(): ReadonlyArray<Game.TileState> {
         const results = [];
         for (let letter = 0; letter < 5; letter++) {
             results[letter] = Game.TileState.Absent;
-            for (let row = 0; row < this.row; row++) {
-                if (this.letters[row][letter] === this.word[letter]) {
+            for (let row = 0; row < this.state.row; row++) {
+                if (this.state.letters[row][letter] === this.word[letter]) {
                     results[letter] = Game.TileState.Correct;
                     break;
-                } else if (this.letters[row].includes(this.word[letter])) {
+                } else if (this.state.letters[row].includes(this.word[letter])) {
                     results[letter] = Game.TileState.Present;
                 }
             }
@@ -192,9 +184,9 @@ class Game {
         return results;
     }
 
-    public getTextResults(): string {
+    public get textResults(): string {
         const states = ["Fake Wordle", `Time: ${Game.getTimer(this.duration)}`];
-        for (let row = 0; row < this.row; row++) {
+        for (let row = 0; row < this.state.row; row++) {
             states.push(this.getTileStates(row).map(Game.mapTileStateToEmote).join(""));
         }
         return states.join(navigator.userAgent.includes("Windows") ? "\r\n" : "\n");
@@ -211,20 +203,8 @@ class Game {
         }
     }
 
-    private clone(): Game {
-        return new Game(
-            this.wordId,
-            this._letters,
-            this.row,
-            this.col,
-            this.complete,
-            this.endTime,
-            this.seenResults,
-            this.showingResults,
-            this.startTime,
-            this.finishTime,
-            this.won
-        );
+    public export(): GameState {
+        return { ...this.state };
     }
 
     public static getTimer(time: number): string {

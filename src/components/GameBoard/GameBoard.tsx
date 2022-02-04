@@ -1,10 +1,10 @@
 import React from "react";
-import Game from "../../Game";
 import TileRow from "./TileRow";
 import "./GameBoard.css";
+import { GameState } from "../../Game/Game";
 
 type GameBoardProps = {
-    game: Game;
+    game: GameState;
 };
 
 export default function GameBoard({ game }: GameBoardProps) {

@@ -1,16 +1,17 @@
 import React from "react";
 import Game from "../../Game";
+import { GameState } from "../../Game/Game";
 import TileRow from "../GameBoard/TileRow";
 import "./Overlay.css";
 
 type OverlayProps = {
-    game: Game;
+    game: GameState;
     onClose: () => void;
 };
 
 export default function Overlay({ game, onClose }: OverlayProps) {
     const share = () => {
-        navigator.clipboard.writeText(game.getTextResults());
+        navigator.clipboard.writeText(new Game(game).textResults);
         alert("Copied results to clipboard");
     };
 
@@ -18,7 +19,7 @@ export default function Overlay({ game, onClose }: OverlayProps) {
         <div className={"overlay" + (game.showingResults ? " visible" : "") + (!game.seenResults ? " wait" : "")}>
             <div className="overlay-contents text-center">
                 <h1 className={"title " + (game.won ? "won" : "lost")}>{game.won ? "Congratulations!" : "Fail!"}</h1>
-                <p>Completed in {Game.getTimer(game.duration)}</p>
+                <p>Completed in {Game.getTimer(new Game(game).duration)}</p>
                 <div className="results-wrapper">
                     <div className="results center">
                         <TileRow game={game} results />
