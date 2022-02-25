@@ -21,9 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier src/**/* --write",
-    "predeploy": "npm run build",
-    "deploy": "echo wordle.romz.xyz > ./build/CNAME && gh-pages -d build"
+    "prettier": "prettier src/**/* --write"
   },
   "eslintConfig": {
     "extends": [
@@ -44,7 +42,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3",
     "prettier": "^2.5.1"
   },
   "homepage": "https://wordle.romz.xyz/"
