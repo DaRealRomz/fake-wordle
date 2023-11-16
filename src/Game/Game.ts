@@ -21,7 +21,7 @@ class Game {
     constructor(state?: GameState | number) {
         if (!state || typeof(state) === 'number') {
             const now = Date.now();
-            const expireTime = now - (now % 300000) + 300000;
+            const expireTime = now - (now % 60000) + 60000;
             state = {
                 wordId: state || Math.floor(new RC4(RC4.getKey(expireTime)).random() * commonWords.length),
                 letters: Array.from(Array(6), () => Array(5).fill("")) as string[][],
